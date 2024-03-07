@@ -5,18 +5,26 @@ const initialGameBoard = [
   [null, null, null],
   [null, null, null],
 ];
-export default function GameBoard({ onHandleGameBoardSquare, playerMark }) {
-  const [gameBoard, setGameBoard] = useState(initialGameBoard);
+export default function GameBoard({ onHandleGameBoardSquare, turns }) {
+  let gameBoard = initialGameBoard;
+  for (let turn of turns) {
+    const { square, player } = turn;
+    const { row, col } = square;
 
-  function handleGameBoardMark(rowIndex, colIndex) {
-    setGameBoard((prevGameBoard) => {
-      const updatedBoard = [...prevGameBoard.map((rows) => [...rows])];
-      updatedBoard[rowIndex][colIndex] = playerMark;
-      return updatedBoard;
-    });
-
-    onHandleGameBoardSquare();
+    gameBoard[row][col] = player;
   }
+
+  // const [gameBoard, setGameBoard] = useState(initialGameBoard);
+
+  // function handleGameBoardMark(rowIndex, colIndex) {
+  //   setGameBoard((prevGameBoard) => {
+  //     const updatedBoard = [...prevGameBoard.map((rows) => [...rows])];
+  //     updatedBoard[rowIndex][colIndex] = playerMark;
+  //     return updatedBoard;
+  //   });
+
+  //   onHandleGameBoardSquare();
+  // }
   return (
     <ol id="game-board">
       {gameBoard.map((row, rowIndex) => (
@@ -26,7 +34,7 @@ export default function GameBoard({ onHandleGameBoardSquare, playerMark }) {
               <li key={colIndex}>
                 <button
                   onClick={() => {
-                    handleGameBoardMark(rowIndex, colIndex);
+                    onHandleGameBoardSquare(rowIndex, colIndex);
                   }}
                 >
                   {playerSymbol}
